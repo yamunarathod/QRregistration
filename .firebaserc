@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "chat-app-1cc8b": {
+      "hosting": {
+        "my-web": [
+          "chat-app-1cc8b"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "chat-app-1cc8b"
+  }
+}

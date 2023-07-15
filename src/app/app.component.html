@@ -1,0 +1,15 @@
+<router-outlet></router-outlet>
+<!-- <ul *ngIf="data$ | async as data">
+    <li>{{ data.UNIQUECODE }} - {{ data.NUMBER }}-{{ data.COUNT }}</li>
+</ul>
+<input type="text" placeholder="Enter Document ID">
+<button (click)="getDataById( )">Get Data</button> -->
+
+<input type="text" [(ngModel)]="NUMBER" placeholder="Enter Unique Code">
+<button (click)="getDataById()">Get Data</button>
+
+<ul *ngIf="data$ | async as data">
+    <li>COUNT: {{ data.COUNT }}</li>
+    <!-- <li>NUMBER: {{ data.NUMBER }}</li>
+    <li>UNIQUE CODE: {{ data.UNIQUECODE }}</li> -->
+</ul>

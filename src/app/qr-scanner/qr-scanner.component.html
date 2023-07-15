@@ -1,0 +1,11 @@
+<div class="min-w-full h-auto bg-black fixed">
+    <img src="../assets/logo.png" alt="" class="w-36 md:w-32 lg:w-48  top-0 left-0 m-1 md:m-4 ">
+</div>
+<!-- For camera -->
+<section class="w-[100%] h-[100vh] flex justify-center items-center bg-black ">
+    <ngx-scanner-qrcode class="w-[80vw] lg:w-[40vw] md:w-[60vw] rounded-[1rem] lg:rounded-[3rem] border border-gray-300"
+        #action="scanner" (event)="onEvent($event, action)"></ngx-scanner-qrcode>
+</section>
+<div class="min-w-full h-auto bg-black fixed bottom-0 left-0">
+    <h6 class="font-bold m-4 text-white text-center text-[1rem] lg:text-[1.5rem]">Crafting Magical Experiences</h6>
+</div>

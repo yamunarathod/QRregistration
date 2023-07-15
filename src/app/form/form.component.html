@@ -1,0 +1,52 @@
+<div class="min-w-full h-auto bg-black fixed">
+  <img src="../assets/logo.png" alt="" class="w-36 md:w-32 lg:w-48  top-0 left-0 m-1 md:m-4 ">
+</div>
+<!-- <button type="button" (click)="getUser()">get</button> -->
+<button type="button" (click)="getUser()">get</button>
+
+<section class="w-[100%] h-[100vh] flex justify-center items-center bg-black">
+
+  <form [formGroup]="myForm" (ngSubmit)="onSubmit()"
+    class="w-[90vw] lg:w-[40vw] bg-black text-white p-8 lg:px-[3rem] lg:py-[2rem] xl:px-[5rem] xl:py-[2rem] 2xl:px-[8rem] 2xl:py-[2rem] md:px-[5rem] md:py-[3rem] rounded-[1rem] shadow-[0_15px_50px_-5px_rgba(255,255,255,0.3)] ">
+    <h6 class="uppercase text-center text-[1rem] font-bold mb-1 lg:text-[2rem] md:text-[1.5rem]">Fill The Below Details
+    </h6>
+    <label for="name" class="block md:mt-5 mt-3">Name</label>
+    <input type="text" id="name" formControlName="name"
+      class="placeholder:text-slate-400 text-black block bg-white w-full border border-slate-300 rounded-md md:md:mt-5 py-2 pl-4 shadow-sm focus:outline-none focus:border-yellow-500 focus:ring-yellow-500 focus:ring-1 sm:text-sm"
+      placeholder="Enter name" />
+    <div *ngIf="formControls['name'].touched && formControls['name'].invalid" class="error">
+      <div *ngIf="formControls['name'].errors?.['required']" class="text-red-800">Name is required.</div>
+    </div>
+
+    <label for="email" class="block md:mt-5 mt-3">Email</label>
+    <input type="email" id="email" formControlName="email"
+      class="placeholder:text-slate-400 text-black block bg-white w-full border border-slate-300 rounded-md md:md:mt-5 py-2 pl-4 shadow-sm focus:outline-none focus:border-yellow-500 focus:ring-yellow-500 focus:ring-1 sm:text-sm"
+      placeholder="Enter email" />
+    <div *ngIf="formControls['email'].touched && formControls['email'].invalid" class="error">
+      <div *ngIf="formControls['email'].errors?.['required']" class="text-red-800">Email is required.</div>
+    </div>
+
+    <label for="company" class="block md:mt-5 mt-3">Company</label>
+    <input type="text" id="company" formControlName="company"
+      class="placeholder:text-slate-400 text-black block bg-white w-full border border-slate-300 rounded-md md:md:mt-5 py-2 pl-4 shadow-sm focus:outline-none focus:border-yellow-500 focus:ring-yellow-500 focus:ring-1 sm:text-sm"
+      placeholder="Enter company" />
+    <div *ngIf="formControls['company'].touched && formControls['company'].invalid" class="error">
+      <div *ngIf="formControls['company'].errors?.['required']" class="text-red-800">Company is required.</div>
+    </div>
+
+    <label for="phone" class="block md:mt-5 mt-3">Phone</label>
+    <input type="text" id="phone" formControlName="phone"
+      class="placeholder:text-slate-400 text-black block bg-white w-full border border-slate-300 rounded-md md:md:mt-5 py-2 pl-4 shadow-sm focus:outline-none focus:border-yellow-500 focus:ring-yellow-500 focus:ring-1 sm:text-sm"
+      placeholder="Enter phone" />
+    <div *ngIf="formControls['phone'].touched && formControls['phone'].invalid" class="error">
+      <div *ngIf="formControls['phone'].errors?.['required']" class="text-red-800">Phone is required.</div>
+    </div>
+
+    <button type="submit" [disabled]="myForm.invalid"
+      class="container bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 rounded mt-4 md:mt-8 lg:mt-8">Submit</button>
+  </form>
+
+</section>
+<div class="min-w-full h-auto bg-black fixed bottom-0 left-0">
+  <h6 class="font-bold m-4 text-white text-center text-[1rem] lg:text-[1.5rem]">Crafting Magical Experiences</h6>
+</div> -->
