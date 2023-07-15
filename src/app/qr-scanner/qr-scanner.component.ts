@@ -1,57 +1,90 @@
-import { Component, ViewChild } from '@angular/core';
-import { NgxScannerQrcodeComponent, ScannerQRCodeResult } from 'ngx-scanner-qrcode';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Component, ViewChild, OnInit } from '@angular/core';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/compat/firestore';
+import { Observable } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
-import { flyInOut } from './animations';
+import { NgxScannerQrcodeComponent, ScannerQRCodeResult } from 'ngx-scanner-qrcode';
 
+interface DataItem {
+  UNIQUECODE: string;
+  NUMBER: string;
+  COUNT: number;
+}
 
 @Component({
   selector: 'app-qr-scanner',
   templateUrl: './qr-scanner.component.html',
   styleUrls: ['./qr-scanner.component.css'],
-  animations: [
-    flyInOut, // Import the animation here
-  ]
 })
-export class QrScannerComponent {
-  @ViewChild('action', { static: true, read: NgxScannerQrcodeComponent }) action: NgxScannerQrcodeComponent | undefined;
-  private scannedCount: number = 0;
+export class QrScannerComponent implements OnInit {
+  @ViewChild('action', { static: true, read: NgxScannerQrcodeComponent })
+  action: NgxScannerQrcodeComponent | undefined;
+  private dataDoc: AngularFirestoreDocument<DataItem>;
+  data$: Observable<DataItem>;
+  private isScanned = false;
+  private scanCount = 0;
+
   constructor(
     private firestore: AngularFirestore,
     private toastr: ToastrService
-   
-  ) {
-    this.scannedCount = 0;
-  }
+  ) {}
 
   ngOnInit(): void {
+    this.startScanning();
+  }
+
+  private startScanning(): void {
     this.action?.start();
   }
-  public scannedCounts: { [id: string]: number } = {}; // Track scanned counts for each ID
 
   public onEvent(e: ScannerQRCodeResult[], action?: any): void {
-    const qrCodeValue = e[0]?.value;
-    if (qrCodeValue) {
-      this.checkQRCodeInFirestore(qrCodeValue);
+    if (this.isScanned || this.scanCount >= 4) {
+      return;
     }
-  }
-  
-  private checkQRCodeInFirestore(qrCodeValue: string): void {
-    const documentPath = `data/${qrCodeValue}`;
-    const currentCount = this.scannedCounts[qrCodeValue] || 0;
-    if (currentCount < 4) {
-      this.firestore.doc(documentPath).get().subscribe((doc) => {
+
+    if (e && e.length > 0) {
+      const scannedValue = e[0].value;
+
+      const documentPath = `data/${scannedValue}`;
+      this.dataDoc = this.firestore.doc<DataItem>(documentPath);
+      this.data$ = this.dataDoc.valueChanges();
+
+      this.dataDoc.ref.get().then((doc) => {
         if (doc.exists) {
-          this.toastr.success('QR Code ID exists in Firestore', 'QR Code Validation');
-          this.scannedCounts[qrCodeValue] = currentCount + 1;
+          const currentCount = doc.data()?.COUNT || 0;
+          const updatedCount = currentCount + 1;
+
+          if (updatedCount > 4) {
+            this.toastr.error('Error: Count exceeds 4', 'Count Error');
+            return;
+          }
+
+          this.dataDoc.update({ COUNT: updatedCount }).then(() => {
+            this.toastr.success('Count updated successfully', 'Success');
+            this.scanCount++;
+
+            if (this.scanCount >= 4) {
+              this.stopScanning();
+              this.reloadPage();
+            }
+          }).catch((error) => {
+            console.log('Error updating document:', error);
+          });
         } else {
-          this.toastr.error('QR Code ID does not exist in Firestore', 'QR Code Validation');
+          this.toastr.error('Bad Unique Code', 'ID Error');
         }
-        this.scannedCounts[qrCodeValue] = currentCount + 1;
+
+        this.isScanned = true;
       });
-    } else {
-      this.toastr.error('QR Code scanning limit exceeded', 'Error');
     }
   }
-  
+
+  private stopScanning(): void {
+    this.action?.stop();
+  }
+
+  private reloadPage(): void {
+    setTimeout(() => {
+      location.reload();
+    }, 2000); // Delay before reloading the page (2 seconds)
+  }
 }
